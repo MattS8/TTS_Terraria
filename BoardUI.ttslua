@@ -1,0 +1,17 @@
+BoardUI = {}
+BoardUI.btnPurchaseColor = {0.75,0.75,0.25}
+BoardUI.btnPositionTop = {0,2,-2.15}
+BoardUI.btnPositionBottom = {0,2,2.15}
+BoardUI.purchaseAccessoryButtonParams =  {
+  -- click_function = "purchaseAccessory",
+  -- function_owner = self,
+  label = "Purchase",
+  position = BoardUI.btnPositionTop,
+  rotation = {0,0,0},
+  width = 800,
+  height = 400,
+  font_size = 132,
+  -- color = btnPurchaseColor,
+  font_color = {1,1,1},
+  tooltip = "Purchase this accessory and receive a copy for your character!"
+}

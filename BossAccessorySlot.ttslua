@@ -1,0 +1,57 @@
+local boundAccessory = nil
+local purchaseButton = nil
+
+function onLoad(save_state)
+  self.registerCollisions(false)
+  boundAccessory = nil
+
+  purchaseButtonParams.click_function = "purchaseAccessory"
+  purchaseButtonParams.function_owner = self
+  purchaseButtonParams.color = BoardUI.btnPurchaseColor
+
+  purchaseButton = self.createButton(purchaseButtonParams)
+end
+
+function getPlayerFromColor(color)
+  for _, p in ipairs(Player.getPlayers()) do
+    if (p.color == color) then
+      return p
+    end
+  end
+
+  return nil
+end
+
+function purchaseAccessory(player, other)
+  if boundAccessory == nil then
+    print("Place an accessory card into the slot before purchasing!")
+    return 0
+  end
+
+  local triggeringPlayer = getPlayerFromColor(other)
+
+  if (triggeringPlayer == nil) then
+    log("Error: Couldn't find player who clicked button!")
+    return -1
+  end
+
+  if (triggeringPlayer.getHandTransform() == nil) then
+    print("Only players in the game can purchase items!")
+    return -2
+  end
+
+  local newObj = boundAccessory.clone({self.getPosition(), false})
+  newObj.setPosition(self.getPosition(), false, false)
+  newObj.setRotationSmooth({0,0,0}, true, true)
+  newObj.setPositionSmooth(triggeringPlayer.getHandTransform().position, false, false)
+
+  print(triggeringPlayer.color .. " purchased " .. boundAccessory.getName() .. "!")
+end
+
+function onCollisionEnter(collision_info)
+  -- collision_info table:
+  --   collision_object    Object
+  --   contact_points      Table     {Vector, ...}
+  --   relative_velocity   Vector
+  boundAccessory = collision_info.collision_object
+end
